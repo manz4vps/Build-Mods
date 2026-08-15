@@ -13,7 +13,7 @@
   "environment": "client",
   "entrypoints": {
     "client": [
-      "com.mousefix.mixin.MouseFixClient"
+      "com.mousefix.MouseFixClient"
     ]
   },
   "mixins": [
