@@ -3,44 +3,49 @@ package com.mousefix.mixin;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.Mouse;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Mouse.class)
 public class MouseMixin {
 
-    // Fitur Shadow untuk membypass status "private" pada method bawaan Minecraft
-    @Shadow
-    private void onCursorPos(long window, double x, double y) {}
+    @Unique
+    private double capturedX;
 
     @Unique
-    private boolean isFixing = false;
+    private double capturedY;
 
-    @Inject(method = "onCursorPos", at = @At("HEAD"), cancellable = true)
-    private void fixCursorPos(long window, double x, double y, CallbackInfo ci) {
-        // Cek mod nyala atau mati, dan pastikan tidak terjadi infinite loop
-        if (com.mousefix.MouseFixClient.isEnabled && !isFixing) {
-            isFixing = true; 
-            
+    // 1. Tangkap input koordinat asli dari PojavLauncher
+    @Inject(method = "onCursorPos", at = @At("HEAD"))
+    private void captureMousePos(long window, double x, double y, CallbackInfo ci) {
+        this.capturedX = x;
+        this.capturedY = y;
+    }
+
+    // 2. Ganti nilai parameter X yang masuk ke game menjadi Y (Tukar X ke Y)
+    @ModifyVariable(method = "onCursorPos", at = @At("HEAD"), ordinal = 0, argsOnly = true)
+    private double fixX(double x) {
+        if (com.mousefix.MouseFixClient.isEnabled) {
+            return this.capturedY; 
+        }
+        return x;
+    }
+
+    // 3. Ganti nilai parameter Y yang masuk ke game menjadi (Tinggi Layar - X)
+    // Supaya kamera saat melihat atas/bawah tidak terbalik, dan kursor menu akurat!
+    @ModifyVariable(method = "onCursorPos", at = @At("HEAD"), ordinal = 1, argsOnly = true)
+    private double fixY(double y) {
+        if (com.mousefix.MouseFixClient.isEnabled) {
             MinecraftClient client = MinecraftClient.getInstance();
             if (client.getWindow() != null) {
-                // 1. Tukar X dan Y
-                double fixedX = y;
-                
-                // 2. Balik nilai Y dari ukuran tinggi layar
-                double fixedY = client.getWindow().getHeight() - x; 
-
-                // Panggil ulang input mouse pakai method Shadow yang sudah di-bypass
-                this.onCursorPos(window, fixedX, fixedY);
-                
-                // Batalkan input aslinya yang nge-bug dari Pojav
-                ci.cancel(); 
+                return client.getWindow().getHeight() - this.capturedX;
             }
-            
-            isFixing = false;
+            // Fallback kalau window belum terbaca sempurna
+            return -this.capturedX; 
         }
+        return y;
     }
 }
