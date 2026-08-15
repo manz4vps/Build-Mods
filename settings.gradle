@@ -1,11 +1,21 @@
-pluginManagement {
-    repositories {
-        maven {
-            name = "Fabric"
-            url = "https://maven.fabricmc.net/"
-        }
-        mavenCentral()
-        gradlePluginPortal()
-    }
+{
+  "schemaVersion": 1,
+  "id": "mousefix",
+  "version": "${version}",
+  "name": "Mouse Fix Mod",
+  "description": "Memperbaiki sumbu X dan Y mouse yang terbalik di PojavLauncher / Android 13.",
+  "authors": ["manz4vps"],
+  "contact": {},
+  "license": "MIT",
+  "icon": "assets/mousefix/icon.png",
+  "environment": "client",
+  "entrypoints": {},
+  "mixins": [
+    "mousefix.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.16.5",
+    "minecraft": "~1.21.11",
+    "java": ">=21"
+  }
 }
-rootProject.name = 'mousefix'
