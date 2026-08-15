@@ -1,5 +1,6 @@
 package com.mousefix.mixin;
 
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.Mouse;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -16,11 +17,18 @@ public class MouseMixin {
             target = "Lnet/minecraft/client/network/ClientPlayerEntity;changeLookDirection(DD)V"
         )
     )
-    private void swapMouseAxis(Args args) {
+    private void fixMouseAxis(Args args) {
+        MinecraftClient client = MinecraftClient.getInstance();
+
+        // Kalau sedang berada di menu/inventory, jangan ubah input mouse.
+        if (client.currentScreen != null) {
+            return;
+        }
+
         double x = args.get(0);
         double y = args.get(1);
 
-        // Tukar X dan Y
+        // Gameplay: tukar X dan Y.
         args.set(0, y);
         args.set(1, x);
     }
