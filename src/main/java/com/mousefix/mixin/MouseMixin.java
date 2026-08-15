@@ -1,6 +1,6 @@
 package com.mousefix.mixin;
 
-import net.minecraft.client.MinecraftClient;
+import com.mousefix.MouseFixClient;
 import net.minecraft.client.Mouse;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -10,9 +10,13 @@ import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 @Mixin(Mouse.class)
 public class MouseMixin {
 
-    // =========================
-    // GAMEPLAY
-    // =========================
+    /*
+     * GAMEPLAY
+     *
+     * Mengubah delta mouse yang dikirim ke player.
+     * Ini adalah bagian yang sebelumnya sudah berhasil
+     * membuat arah gameplay sesuai yang kamu mau.
+     */
     @ModifyArgs(
         method = "updateMouse(D)V",
         at = @At(
@@ -21,43 +25,17 @@ public class MouseMixin {
         )
     )
     private void fixGameplayMouse(Args args) {
-        if (!com.mousefix.MouseFixClient.isEnabled) {
+        if (!MouseFixClient.isEnabled) {
             return;
         }
 
         double x = args.get(0);
         double y = args.get(1);
 
+        // Tukar X dan Y.
         args.set(0, y);
+
+        // Balik tanda supaya arah vertikal gameplay benar.
         args.set(1, -x);
-    }
-
-    // =========================
-    // MENU / INVENTORY CURSOR
-    // =========================
-    @ModifyArgs(
-        method = "method_1600(JDD)V",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/class_437;method_16014(DD)V"
-        )
-    )
-    private void fixMenuCursor(Args args) {
-        if (!com.mousefix.MouseFixClient.isEnabled()) {
-            return;
-        }
-
-        MinecraftClient client = MinecraftClient.getInstance();
-
-        if (client.currentScreen == null) {
-            return;
-        }
-
-        double x = args.get(0);
-        double y = args.get(1);
-
-        // Balik sumbu cursor GUI.
-        args.set(0, x);
-        args.set(1, -y);
     }
 }
