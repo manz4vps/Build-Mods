@@ -8,17 +8,20 @@ import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
 @Mixin(Mouse.class)
 public class MouseMixin {
-    
+
     @ModifyArgs(
-        method = "updateMouse()V",
-        at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;changeLookDirection(DD)V")
+        method = "updateMouse(D)V",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/client/network/ClientPlayerEntity;changeLookDirection(DD)V"
+        )
     )
     private void swapMouseAxis(Args args) {
-        double originalDeltaX = args.get(0);
-        double originalDeltaY = args.get(1);
-        
-        // TUKAR SUMBU X DAN Y
-        args.set(0, originalDeltaY);
-        args.set(1, originalDeltaX);
+        double x = args.get(0);
+        double y = args.get(1);
+
+        // Tukar X dan Y
+        args.set(0, y);
+        args.set(1, x);
     }
 }
