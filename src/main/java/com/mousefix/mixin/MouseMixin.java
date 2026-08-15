@@ -10,9 +10,6 @@ import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 @Mixin(Mouse.class)
 public class MouseMixin {
 
-    // =========================
-    // GAMEPLAY
-    // =========================
     @ModifyArgs(
         method = "updateMouse(D)V",
         at = @At(
@@ -20,46 +17,21 @@ public class MouseMixin {
             target = "Lnet/minecraft/client/network/ClientPlayerEntity;changeLookDirection(DD)V"
         )
     )
-    private void fixGameplayMouse(Args args) {
-
+    private void fixMouseAxis(Args args) {
+        // Cek status on/off dari mod
         if (!com.mousefix.MouseFixClient.isEnabled) {
             return;
         }
+
+        // Catatan: Kode pengecekan "currentScreen" sudah dihapus di sini 
+        // supaya mod tetap berfungsi saat membuka menu/inventory.
 
         double x = args.get(0);
         double y = args.get(1);
 
-        // JANGAN DIUBAH — ini versi gameplay kamu yang sudah bekerja
+        // Gameplay: tukar X dan Y.
         args.set(0, y);
-        args.set(1, -x);
-    }
-
-
-    // =========================
-    // MENU / INVENTORY CURSOR
-    // =========================
-    @ModifyArgs(
-        method = "onCursorPos(JDD)V",
-        at = @At("HEAD")
-    )
-    private void fixMenuCursor(Args args) {
-
-        if (!com.mousefix.MouseFixClient.isEnabled) {
-            return;
-        }
-
-        MinecraftClient client = MinecraftClient.getInstance();
-
-        // Hanya perbaiki cursor ketika menu/inventory terbuka
-        if (client.currentScreen == null) {
-            return;
-        }
-
-        double x = args.get(1);
-        double y = args.get(2);
-
-        // Tukar X/Y seperti bug yang kamu alami
-        args.set(1, y);
-        args.set(2, x);
+        // Sumbu Y diberi tanda minus (-) supaya tidak terbalik saat melihat ke atas/bawah
+        args.set(1, -x); 
     }
 }
