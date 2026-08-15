@@ -3,13 +3,19 @@
   "id": "mousefix",
   "version": "${version}",
   "name": "Mouse Fix Mod",
-  "description": "Memperbaiki sumbu X dan Y mouse yang terbalik di PojavLauncher / Android 13.",
-  "authors": ["manz4vps"],
+  "description": "Memperbaiki sumbu X dan Y mouse yang terbalik di PojavLauncher",
+  "authors": [
+    "manz4vps"
+  ],
   "contact": {},
   "license": "MIT",
   "icon": "assets/mousefix/icon.png",
   "environment": "client",
-  "entrypoints": {},
+  "entrypoints": {
+    "client": [
+      "com.mousefix.MouseFixClient"
+    ]
+  },
   "mixins": [
     "mousefix.mixins.json"
   ],
