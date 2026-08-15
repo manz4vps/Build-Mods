@@ -18,8 +18,8 @@ public class MouseMixin {
         )
     )
     private void fixMouseAxis(Args args) {
-        // Cek status on/off dari file MouseFixClient
-        if (!com.mousefix.mixin.MouseFixClient.isEnabled) {
+        // Cek status on/off (path-nya disesuaikan ulang tanpa .mixin)
+        if (!com.mousefix.MouseFixClient.isEnabled) {
             return;
         }
 
