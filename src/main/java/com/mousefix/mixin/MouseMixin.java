@@ -18,6 +18,11 @@ public class MouseMixin {
         )
     )
     private void fixMouseAxis(Args args) {
+        // [TAMBAHAN BARU] Cek status on/off. Kalau lagi OFF, script ini berhenti kerja.
+        if (!com.mousefix.MouseFixClient.isEnabled) {
+            return;
+        }
+
         MinecraftClient client = MinecraftClient.getInstance();
 
         // Kalau sedang berada di menu/inventory, jangan ubah input mouse.
