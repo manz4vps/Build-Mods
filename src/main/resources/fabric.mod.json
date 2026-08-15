@@ -4,7 +4,7 @@
   "version": "${version}",
   "name": "Mouse Fix Mod",
   "description": "Memperbaiki sumbu X dan Y mouse yang terbalik di PojavLauncher / Android 13.",
-  "authors": ["Gemini"],
+  "authors": ["manz4vps"],
   "contact": {},
   "license": "MIT",
   "icon": "assets/mousefix/icon.png",
