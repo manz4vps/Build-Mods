@@ -1,4 +1,4 @@
-package com.mousefix.mixin;
+package com.mousefix;
 
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -13,7 +13,6 @@ public class MouseFixClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        // Di Minecraft 1.21.11, parameter ketiga wajib pakai object kategori bawaan (misal: MISC)
         toggleKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
                 "Toggle Mouse Fix", 
                 GLFW.GLFW_KEY_F8,      
