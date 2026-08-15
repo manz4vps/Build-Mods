@@ -18,23 +18,20 @@ public class MouseMixin {
         )
     )
     private void fixMouseAxis(Args args) {
-        // Cek status on/off (path-nya disesuaikan ulang tanpa .mixin)
+        // Cek status on/off dari mod
         if (!com.mousefix.MouseFixClient.isEnabled) {
             return;
         }
 
-        MinecraftClient client = MinecraftClient.getInstance();
-
-        // Kalau sedang berada di menu/inventory, jangan ubah input mouse.
-        if (client.currentScreen != null) {
-            return;
-        }
+        // Catatan: Kode pengecekan "currentScreen" sudah dihapus di sini 
+        // supaya mod tetap berfungsi saat membuka menu/inventory.
 
         double x = args.get(0);
         double y = args.get(1);
 
         // Gameplay: tukar X dan Y.
         args.set(0, y);
-        args.set(1, x);
+        // Sumbu Y diberi tanda minus (-) supaya tidak terbalik saat melihat ke atas/bawah
+        args.set(1, -x); 
     }
 }
