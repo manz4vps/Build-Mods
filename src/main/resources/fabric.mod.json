@@ -9,11 +9,7 @@
   "license": "MIT",
   "icon": "assets/mousefix/icon.png",
   "environment": "client",
-  "entrypoints": {
-    "client": [
-      "com.mousefix.MouseFix"
-    ]
-  },
+  "entrypoints": {},
   "mixins": [
     "mousefix.mixins.json"
   ],
