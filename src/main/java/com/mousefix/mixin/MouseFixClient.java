@@ -13,9 +13,10 @@ public class MouseFixClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
+        // Tombol shortcut diganti ke F12
         toggleKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
                 "Toggle Mouse Fix", 
-                GLFW.GLFW_KEY_F8,      
+                GLFW.GLFW_KEY_F12,      
                 KeyBinding.Category.MISC
         ));
 
