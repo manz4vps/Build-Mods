@@ -18,7 +18,7 @@ public class MouseMixin {
         )
     )
     private void fixMouseAxis(Args args) {
-        // Cek status on/off dari mod (menggunakan tombol F12)
+        // Cek status on/off dari mod
         if (!com.mousefix.MouseFixClient.isEnabled) {
             return;
         }
@@ -27,14 +27,19 @@ public class MouseMixin {
         double x = args.get(0);
         double y = args.get(1);
 
-        // ==========================================
-        // IDE BARU: Balik semua arahnya (Inverted)
-        // ==========================================
-        
-        // Kiri jadi Kanan, Kanan jadi Kiri (sumbu X diisi dengan minus Y)
-        args.set(0, -y);
-        
-        // Atas jadi Bawah, Bawah jadi Atas (sumbu Y diisi dengan X positif)
-        args.set(1, x); 
+        // Cek HP lagi miring kemana
+        if (com.mousefix.MouseFixClient.isLeftOrientation) {
+            // ==========================================
+            // KONDISI 1: Atas HP di Kiri
+            // ==========================================
+            args.set(0, y);
+            args.set(1, -x);
+        } else {
+            // ==========================================
+            // KONDISI 2: Atas HP di Kanan (Script aslimu)
+            // ==========================================
+            args.set(0, -y);
+            args.set(1, x);
+        }
     }
 }
